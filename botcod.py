@@ -1,3 +1,10 @@
+from flask import Flask  # ← 1. WEB SERVER QO'SHILDI
+app = Flask(__name__)    # ← 2. WEB SERVER QO'SHILDI
+
+@app.route('/')          # ← 3. WEB SERVER QO'SHILDI
+def home():
+    return '🎬 Kino Bot ishlayapti! Admin: @X4732'
+
 import sqlite3
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup, ReplyKeyboardMarkup, ReplyKeyboardRemove, BotCommand
 from telegram.ext import (
@@ -388,19 +395,19 @@ def kino_korish(update: Update, context: CallbackContext):
     if update.message.text.isdigit():
         kino_id = int(update.message.text)
         con = sqlite3.connect('kino_bot.db')
-        cur = con.cursor()
-        cur.execute("SELECT file_id, nomi FROM kinolar WHERE id = ?", (kino_id,))
-        row = cur.fetchone()
-        con.close()
-        if row:
-            context.bot.send_video(
-                chat_id=update.effective_chat.id, 
-                video=row[0], 
-                caption=f"🎬 {row[1]}\n\n✅ Sizga yoqadi degan umiddamiz!",
-                reply_markup=user_menu if user_id != ADMIN_ID else admin_menu
-            )
-        else:
-            update.message.reply_text("❌ Bunday ID topilmadi.")
+    cur = con.cursor()
+    cur.execute("SELECT file_id, nomi FROM kinolar WHERE id = ?", (kino_id,))
+    row = cur.fetchone()
+    con.close()
+    if row:
+        context.bot.send_video(
+            chat_id=update.effective_chat.id, 
+            video=row[0], 
+            caption=f"🎬 {row[1]}\n\n✅ Sizga yoqadi degan umiddamiz!",
+            reply_markup=user_menu if user_id != ADMIN_ID else admin_menu
+        )
+    else:
+        update.message.reply_text("❌ Bunday ID topilmadi.")
     else:
         if update.effective_user.id == ADMIN_ID:
             update.message.reply_text("❗️ID yuboring yoki menyudan foydalaning.", reply_markup=admin_menu)
@@ -440,7 +447,7 @@ def menyuni_yopish(update: Update, context: CallbackContext):
 # Botni ishga tushirish
 def main():
     baza_yarat()
-    updater = Updater("8441563290:AAE22jf3rB2dWIrxEV7fkOogqaHjUdJxmO8", use_context=True)
+    updater = Updater("7733959711:AAF4spxKcCVKcSZa83aAU-UJUe0II95uyjg", use_context=True)
     dp = updater.dispatcher
 
     dp.add_handler(CommandHandler("start", start))
@@ -493,4 +500,4 @@ def main():
     updater.idle()
 
 if __name__ == '__main__':
-    main()
+    main()  # ← 4. WEB SERVER QO'SHILDI (o'zgartirildi)
