@@ -1,7 +1,7 @@
-from flask import Flask  # ← 1. WEB SERVER QO'SHILDI
-app = Flask(__name__)    # ← 2. WEB SERVER QO'SHILDI
+from flask import Flask
+app = Flask(__name__)
 
-@app.route('/')          # ← 3. WEB SERVER QO'SHILDI
+@app.route('/')
 def home():
     return '🎬 Kino Bot ishlayapti! Admin: @X4732'
 
@@ -19,8 +19,8 @@ from telegram.ext import (
 from datetime import datetime, timedelta
 
 # 🔐 Admin Telegram ID
-ADMIN_ID = 6372135407  # <-- Faqat raqamlar, string emas
-ADMIN_USERNAME = "@X4732"  # Sizning Telegram useringiz
+ADMIN_ID = 6372135407
+ADMIN_USERNAME = "@X4732"
 
 # 📢 Majburiy obuna kanallari
 REQUIRED_CHANNELS = [
@@ -395,19 +395,19 @@ def kino_korish(update: Update, context: CallbackContext):
     if update.message.text.isdigit():
         kino_id = int(update.message.text)
         con = sqlite3.connect('kino_bot.db')
-    cur = con.cursor()
-    cur.execute("SELECT file_id, nomi FROM kinolar WHERE id = ?", (kino_id,))
-    row = cur.fetchone()
-    con.close()
-    if row:
-        context.bot.send_video(
-            chat_id=update.effective_chat.id, 
-            video=row[0], 
-            caption=f"🎬 {row[1]}\n\n✅ Sizga yoqadi degan umiddamiz!",
-            reply_markup=user_menu if user_id != ADMIN_ID else admin_menu
-        )
-    else:
-        update.message.reply_text("❌ Bunday ID topilmadi.")
+        cur = con.cursor()
+        cur.execute("SELECT file_id, nomi FROM kinolar WHERE id = ?", (kino_id,))
+        row = cur.fetchone()
+        con.close()
+        if row:
+            context.bot.send_video(
+                chat_id=update.effective_chat.id, 
+                video=row[0], 
+                caption=f"🎬 {row[1]}\n\n✅ Sizga yoqadi degan umiddamiz!",
+                reply_markup=user_menu if user_id != ADMIN_ID else admin_menu
+            )
+        else:
+            update.message.reply_text("❌ Bunday ID topilmadi.")
     else:
         if update.effective_user.id == ADMIN_ID:
             update.message.reply_text("❗️ID yuboring yoki menyudan foydalaning.", reply_markup=admin_menu)
@@ -500,4 +500,4 @@ def main():
     updater.idle()
 
 if __name__ == '__main__':
-    main()  # ← 4. WEB SERVER QO'SHILDI (o'zgartirildi)
+    main()
